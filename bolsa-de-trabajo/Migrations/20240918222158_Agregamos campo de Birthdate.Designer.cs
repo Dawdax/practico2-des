@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using bolsa_de_trabajo.Models;
 
@@ -11,9 +12,11 @@ using bolsa_de_trabajo.Models;
 namespace bolsa_de_trabajo.Migrations
 {
     [DbContext(typeof(GOES_DBContext))]
-    partial class GOES_DBContextModelSnapshot : ModelSnapshot
+    [Migration("20240918222158_Agregamos campo de Birthdate")]
+    partial class AgregamoscampodeBirthdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -189,11 +192,11 @@ namespace bolsa_de_trabajo.Migrations
 
             modelBuilder.Entity("bolsa_de_trabajo.Models.SelectorAgent", b =>
                 {
-                    b.Property<int>("IdSelectorAgent")
+                    b.Property<int>("IdCandidates")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdSelectorAgent"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCandidates"));
 
                     b.Property<DateOnly>("Birthdate")
                         .HasColumnType("date");
@@ -223,7 +226,7 @@ namespace bolsa_de_trabajo.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.HasKey("IdSelectorAgent");
+                    b.HasKey("IdCandidates");
 
                     b.ToTable("SelectorAgent");
                 });

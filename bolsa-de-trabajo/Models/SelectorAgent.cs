@@ -6,7 +6,7 @@ namespace bolsa_de_trabajo.Models
     public class SelectorAgent
     {
         [Key]
-        public int IdCandidates { get; set; }
+        public int IdSelectorAgent { get; set; }
 
         [Required(ErrorMessage = "El campo de nombres es requerido")]
         [StringLength(200)]
@@ -19,6 +19,9 @@ namespace bolsa_de_trabajo.Models
         [Required(ErrorMessage = "El campo de teléfono es requerido")]
         [StringLength(50)]
         public string Phone { get; set; }
+
+        [Required(ErrorMessage = "El campo de fecha de nacimiento es requerido")]
+        public DateOnly Birthdate { get; set; }
 
         [Required(ErrorMessage = "El campo de email es requerido")]
         [StringLength(250)]
