@@ -24,5 +24,7 @@ namespace bolsa_de_trabajo.Models
         public int JobId { get; set; }
         public Jobs Jobs { get; set; }
 
+        public CV CV { get; set; }
+
     }
 }

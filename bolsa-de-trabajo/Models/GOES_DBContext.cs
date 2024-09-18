@@ -11,6 +11,8 @@ namespace bolsa_de_trabajo.Models
         public DbSet<Jobs> Jobs { get; set;}
         public DbSet<SelectorAgent> SelectorAgent { get; set; }
         public DbSet<Candidates> Candidates { get; set; }
+        public DbSet<CV> CV { get; set; }
+        public DbSet<BinnacleCV> BinnacleCV { get; set; }
 
     }
 }

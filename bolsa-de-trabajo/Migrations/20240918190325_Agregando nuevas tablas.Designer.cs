@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using bolsa_de_trabajo.Models;
 
@@ -11,9 +12,11 @@ using bolsa_de_trabajo.Models;
 namespace bolsa_de_trabajo.Migrations
 {
     [DbContext(typeof(GOES_DBContext))]
-    partial class GOES_DBContextModelSnapshot : ModelSnapshot
+    [Migration("20240918190325_Agregando nuevas tablas")]
+    partial class Agregandonuevastablas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
