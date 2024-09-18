@@ -1,0 +1,15 @@
+# Ignore build output directories
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+
+# Logs
+*.log
+
+# Other system files
+.DS_Store
+Thumbs.db
