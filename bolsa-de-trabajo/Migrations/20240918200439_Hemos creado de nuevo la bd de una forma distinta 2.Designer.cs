@@ -12,8 +12,8 @@ using bolsa_de_trabajo.Models;
 namespace bolsa_de_trabajo.Migrations
 {
     [DbContext(typeof(GOES_DBContext))]
-    [Migration("20240918190325_Agregando nuevas tablas")]
-    partial class Agregandonuevastablas
+    [Migration("20240918200439_Hemos creado de nuevo la bd de una forma distinta 2")]
+    partial class Hemoscreadodenuevolabddeunaformadistinta2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -109,8 +109,18 @@ namespace bolsa_de_trabajo.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCandidates"));
 
-                    b.Property<int>("JobId")
-                        .HasColumnType("int");
+                    b.Property<DateOnly>("Birthdate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -129,9 +139,30 @@ namespace bolsa_de_trabajo.Migrations
 
                     b.HasKey("IdCandidates");
 
+                    b.ToTable("Candidates");
+                });
+
+            modelBuilder.Entity("bolsa_de_trabajo.Models.CandidatesToJobs", b =>
+                {
+                    b.Property<int>("IdCandidatesToJobs")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCandidatesToJobs"));
+
+                    b.Property<int>("CandidateId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdCandidatesToJobs");
+
+                    b.HasIndex("CandidateId");
+
                     b.HasIndex("JobId");
 
-                    b.ToTable("Candidates");
+                    b.ToTable("CandidatesToJobs");
                 });
 
             modelBuilder.Entity("bolsa_de_trabajo.Models.Jobs", b =>
@@ -167,16 +198,20 @@ namespace bolsa_de_trabajo.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdCandidates"));
 
-                    b.Property<int>("JobId")
-                        .HasColumnType("int");
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("jobsIdJobs")
-                        .HasColumnType("int");
 
                     b.Property<string>("lastName")
                         .IsRequired()
@@ -190,9 +225,30 @@ namespace bolsa_de_trabajo.Migrations
 
                     b.HasKey("IdCandidates");
 
-                    b.HasIndex("jobsIdJobs");
-
                     b.ToTable("SelectorAgent");
+                });
+
+            modelBuilder.Entity("bolsa_de_trabajo.Models.SelectorAgentToJobs", b =>
+                {
+                    b.Property<int>("IdSelectorAgentToJobs")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdSelectorAgentToJobs"));
+
+                    b.Property<int>("JobId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SelectorAgentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdSelectorAgentToJobs");
+
+                    b.HasIndex("JobId");
+
+                    b.HasIndex("SelectorAgentId");
+
+                    b.ToTable("SelectorAgentToJobs");
                 });
 
             modelBuilder.Entity("bolsa_de_trabajo.Models.BinnacleCV", b =>
@@ -217,39 +273,62 @@ namespace bolsa_de_trabajo.Migrations
                     b.Navigation("Candidate");
                 });
 
-            modelBuilder.Entity("bolsa_de_trabajo.Models.Candidates", b =>
+            modelBuilder.Entity("bolsa_de_trabajo.Models.CandidatesToJobs", b =>
                 {
+                    b.HasOne("bolsa_de_trabajo.Models.Candidates", "Candidates")
+                        .WithMany("candidatesToJobs")
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("bolsa_de_trabajo.Models.Jobs", "Jobs")
-                        .WithMany("Candidates")
+                        .WithMany("CandidatesToJobs")
                         .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Candidates");
+
                     b.Navigation("Jobs");
                 });
 
-            modelBuilder.Entity("bolsa_de_trabajo.Models.SelectorAgent", b =>
+            modelBuilder.Entity("bolsa_de_trabajo.Models.SelectorAgentToJobs", b =>
                 {
-                    b.HasOne("bolsa_de_trabajo.Models.Jobs", "jobs")
-                        .WithMany("Agents")
-                        .HasForeignKey("jobsIdJobs")
+                    b.HasOne("bolsa_de_trabajo.Models.Jobs", "Jobs")
+                        .WithMany("SelectorAgentToJobs")
+                        .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("jobs");
+                    b.HasOne("bolsa_de_trabajo.Models.SelectorAgent", "SelectorAgent")
+                        .WithMany("selectorAgentToJobs")
+                        .HasForeignKey("SelectorAgentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Jobs");
+
+                    b.Navigation("SelectorAgent");
                 });
 
             modelBuilder.Entity("bolsa_de_trabajo.Models.Candidates", b =>
                 {
                     b.Navigation("CV")
                         .IsRequired();
+
+                    b.Navigation("candidatesToJobs");
                 });
 
             modelBuilder.Entity("bolsa_de_trabajo.Models.Jobs", b =>
                 {
-                    b.Navigation("Agents");
+                    b.Navigation("CandidatesToJobs");
 
-                    b.Navigation("Candidates");
+                    b.Navigation("SelectorAgentToJobs");
+                });
+
+            modelBuilder.Entity("bolsa_de_trabajo.Models.SelectorAgent", b =>
+                {
+                    b.Navigation("selectorAgentToJobs");
                 });
 #pragma warning restore 612, 618
         }

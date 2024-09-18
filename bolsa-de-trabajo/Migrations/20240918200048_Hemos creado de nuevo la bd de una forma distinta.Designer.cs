@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using bolsa_de_trabajo.Models;
 
@@ -11,9 +12,11 @@ using bolsa_de_trabajo.Models;
 namespace bolsa_de_trabajo.Migrations
 {
     [DbContext(typeof(GOES_DBContext))]
-    partial class GOES_DBContextModelSnapshot : ModelSnapshot
+    [Migration("20240918200048_Hemos creado de nuevo la bd de una forma distinta")]
+    partial class Hemoscreadodenuevolabddeunaformadistinta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -200,6 +203,9 @@ namespace bolsa_de_trabajo.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
+                    b.Property<int?>("JobsIdJobs")
+                        .HasColumnType("int");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(250)
@@ -221,6 +227,8 @@ namespace bolsa_de_trabajo.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.HasKey("IdCandidates");
+
+                    b.HasIndex("JobsIdJobs");
 
                     b.ToTable("SelectorAgent");
                 });
@@ -289,10 +297,17 @@ namespace bolsa_de_trabajo.Migrations
                     b.Navigation("Jobs");
                 });
 
+            modelBuilder.Entity("bolsa_de_trabajo.Models.SelectorAgent", b =>
+                {
+                    b.HasOne("bolsa_de_trabajo.Models.Jobs", null)
+                        .WithMany("Agents")
+                        .HasForeignKey("JobsIdJobs");
+                });
+
             modelBuilder.Entity("bolsa_de_trabajo.Models.SelectorAgentToJobs", b =>
                 {
                     b.HasOne("bolsa_de_trabajo.Models.Jobs", "Jobs")
-                        .WithMany("SelectorAgentToJobs")
+                        .WithMany()
                         .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -318,9 +333,9 @@ namespace bolsa_de_trabajo.Migrations
 
             modelBuilder.Entity("bolsa_de_trabajo.Models.Jobs", b =>
                 {
-                    b.Navigation("CandidatesToJobs");
+                    b.Navigation("Agents");
 
-                    b.Navigation("SelectorAgentToJobs");
+                    b.Navigation("CandidatesToJobs");
                 });
 
             modelBuilder.Entity("bolsa_de_trabajo.Models.SelectorAgent", b =>

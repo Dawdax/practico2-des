@@ -20,11 +20,20 @@ namespace bolsa_de_trabajo.Models
         [StringLength(50)]
         public string Phone { get; set; }
 
-        [ForeignKey("Jobs")]
-        public int JobId { get; set; }
-        public Jobs Jobs { get; set; }
+        [Required(ErrorMessage = "El campo de fecha de nacimiento es requerido")]
+        public DateOnly Birthdate { get; set; }
+
+        [Required(ErrorMessage = "El campo de email es requerido")]
+        [StringLength(250)]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "El campo de contraseña es requerido")]
+        [StringLength(250)]
+        public string Password { get; set; }
 
         public CV CV { get; set; }
+
+        public ICollection<CandidatesToJobs> candidatesToJobs { get; set; }
 
     }
 }

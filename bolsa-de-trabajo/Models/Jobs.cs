@@ -18,8 +18,8 @@ namespace bolsa_de_trabajo.Models
         [DataType(DataType.Date)]
         [Required(ErrorMessage = "El campo de fecha de finalización es requerido")]
         public DateOnly EndDate { get; set; }
+        public ICollection<SelectorAgentToJobs> SelectorAgentToJobs { get; set; }
 
-        public ICollection<Candidates> Candidates { get; set; }
-        public ICollection<SelectorAgent> Agents { get; set; }
+        public ICollection<CandidatesToJobs> CandidatesToJobs { get; set; }
     }
 }
