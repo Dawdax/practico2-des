@@ -10,7 +10,7 @@ namespace GOES.API.Models
         }
 
         public DbSet<Candidato> Candidato { get; set; }
-        public DbSet<HojaDeVida> HojasDeVida { get; set; }
+        public DbSet<HojaDeVida> HojaDeVida { get; set; }
         public DbSet<Bitacora> Bitacora { get; set; }
     }
 }

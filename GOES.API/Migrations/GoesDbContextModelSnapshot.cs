@@ -30,8 +30,9 @@ namespace GOES.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CandidatoId")
-                        .HasColumnType("int");
+                    b.Property<string>("CandidatoCodigo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("FechaModificacion")
                         .HasColumnType("datetime2");
@@ -42,22 +43,17 @@ namespace GOES.API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CandidatoCodigo");
+
                     b.ToTable("Bitacora");
                 });
 
             modelBuilder.Entity("GOES.API.Models.Candidato", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Codigo")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Apellidos")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Codigo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -80,21 +76,15 @@ namespace GOES.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Codigo");
 
                     b.ToTable("Candidato");
                 });
 
             modelBuilder.Entity("GOES.API.Models.HojaDeVida", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CandidatoId")
-                        .HasColumnType("int");
+                    b.Property<string>("CandidatoCodigo")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ExperienciaProfesional")
                         .IsRequired()
@@ -112,9 +102,42 @@ namespace GOES.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CandidatoCodigo");
 
-                    b.ToTable("HojasDeVida");
+                    b.ToTable("HojaDeVida");
+                });
+
+            modelBuilder.Entity("GOES.API.Models.Bitacora", b =>
+                {
+                    b.HasOne("GOES.API.Models.HojaDeVida", "HojaDeVida")
+                        .WithMany("Bitacoras")
+                        .HasForeignKey("CandidatoCodigo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HojaDeVida");
+                });
+
+            modelBuilder.Entity("GOES.API.Models.HojaDeVida", b =>
+                {
+                    b.HasOne("GOES.API.Models.Candidato", "Candidato")
+                        .WithOne("HojaDeVida")
+                        .HasForeignKey("GOES.API.Models.HojaDeVida", "CandidatoCodigo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Candidato");
+                });
+
+            modelBuilder.Entity("GOES.API.Models.Candidato", b =>
+                {
+                    b.Navigation("HojaDeVida")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GOES.API.Models.HojaDeVida", b =>
+                {
+                    b.Navigation("Bitacoras");
                 });
 #pragma warning restore 612, 618
         }
