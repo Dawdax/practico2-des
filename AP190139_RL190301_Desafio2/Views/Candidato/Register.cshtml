@@ -1,0 +1,43 @@
+﻿@model CandidatoDto
+
+<h2>Registro de Candidato</h2>
+
+<form asp-action="Register" method="post">
+    <div>
+        <label for="Nombre">Nombre:</label>
+        <input asp-for="Nombre" class="form-control" />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label for="Apellidos">Apellidos:</label>
+        <input asp-for="Apellidos" class="form-control" />
+        <span asp-validation-for="Apellidos" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label for="Telefono">Teléfono:</label>
+        <input asp-for="Telefono" class="form-control" />
+        <span asp-validation-for="Telefono" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label for="CorreoElectronico">Correo Electrónico:</label>
+        <input asp-for="CorreoElectronico" class="form-control" />
+        <span asp-validation-for="CorreoElectronico" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label for="FechaNacimiento">Fecha de Nacimiento:</label>
+        <input asp-for="FechaNacimiento" type="date" class="form-control" />
+        <span asp-validation-for="FechaNacimiento" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label for="Contrasena">Contraseña:</label>
+        <input asp-for="Contrasena" type="password" class="form-control" />
+        <span asp-validation-for="Contrasena" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Registrar</button>
+</form>
