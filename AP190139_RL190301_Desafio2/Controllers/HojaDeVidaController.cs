@@ -65,4 +65,52 @@ public class HojaDeVidaController : Controller
         ModelState.AddModelError(string.Empty, "Error al ingresar la hoja de vida.");
         return View(hojaDeVidaDto);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> EditarHojaDeVida()
+    {
+        // Obtener el código del candidato desde la sesión
+        var candidatoCodigo = HttpContext.Session.GetString("CodigoCandidato");
+
+        if (string.IsNullOrEmpty(candidatoCodigo))
+        {
+            return RedirectToAction("Index", "Login");
+        }
+
+        // Obtener los datos actuales de la hoja de vida desde la API
+        var hojaDeVida = await _apiService.GetHojaDeVidaAsync(candidatoCodigo);
+        if (hojaDeVida == null)
+        {
+            return RedirectToAction("IngresarHojaDeVida");
+        }
+
+        // Pasar los datos de la hoja de vida a la vista
+        return View(hojaDeVida);
+    }
+    [HttpPost]
+    public async Task<IActionResult> EditarHojaDeVida(HojaDeVidaDto hojaDeVidaDto)
+    {
+        // Obtener el código del candidato desde la sesión
+        var candidatoCodigo = HttpContext.Session.GetString("CodigoCandidato");
+
+        if (string.IsNullOrEmpty(candidatoCodigo))
+        {
+            return RedirectToAction("Index", "Login");
+        }
+
+        // Asignar el código del candidato al DTO
+        hojaDeVidaDto.CandidatoCodigo = candidatoCodigo;
+
+        // Llamar al servicio para actualizar la hoja de vida
+        var success = await _apiService.ActualizarHojaDeVidaAsync(hojaDeVidaDto, "Edición realizada");
+        if (success)
+        {
+            return RedirectToAction("MostrarHojaDeVida", new { codigo = candidatoCodigo });
+        }
+
+        ModelState.AddModelError(string.Empty, "Error al actualizar la hoja de vida.");
+        return View(hojaDeVidaDto);
+    }
+
+
 }

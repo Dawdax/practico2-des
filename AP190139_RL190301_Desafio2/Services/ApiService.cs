@@ -45,9 +45,11 @@ public class ApiService
         var response = await _httpClient.PostAsJsonAsync($"https://localhost:7116/api/HojaDeVida/ingresarHojaDeVida?candidatoCodigo={candidatoCodigo}", hojaDeVidaDto);
         return response.IsSuccessStatusCode;
     }
-
-
-
-
+    public async Task<bool> ActualizarHojaDeVidaAsync(HojaDeVidaDto hojaDeVidaDto, string modificacion)
+    {
+        var candidatoCodigo = hojaDeVidaDto.CandidatoCodigo;
+        var response = await _httpClient.PutAsJsonAsync($"https://localhost:7116/api/HojaDeVida/actualizarHojaDeVida?candidatoCodigo={candidatoCodigo}&modificacion={modificacion}", hojaDeVidaDto);
+        return response.IsSuccessStatusCode;
+    }
 
 }
