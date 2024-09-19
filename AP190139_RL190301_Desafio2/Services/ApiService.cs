@@ -51,5 +51,11 @@ public class ApiService
         var response = await _httpClient.PutAsJsonAsync($"https://localhost:7116/api/HojaDeVida/actualizarHojaDeVida?candidatoCodigo={candidatoCodigo}&modificacion={modificacion}", hojaDeVidaDto);
         return response.IsSuccessStatusCode;
     }
+    public async Task<bool> RegistrarCambioBitacoraAsync(BitacoraDto bitacoraDto)
+    {
+        var response = await _httpClient.PostAsJsonAsync("https://localhost:7116/api/Bitacora/registrar", bitacoraDto);
+        return response.IsSuccessStatusCode;
+    }
+
 
 }

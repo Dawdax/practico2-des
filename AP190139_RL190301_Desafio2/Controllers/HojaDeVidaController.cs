@@ -90,7 +90,6 @@ public class HojaDeVidaController : Controller
     [HttpPost]
     public async Task<IActionResult> EditarHojaDeVida(HojaDeVidaDto hojaDeVidaDto)
     {
-        // Obtener el código del candidato desde la sesión
         var candidatoCodigo = HttpContext.Session.GetString("CodigoCandidato");
 
         if (string.IsNullOrEmpty(candidatoCodigo))
@@ -98,11 +97,21 @@ public class HojaDeVidaController : Controller
             return RedirectToAction("Index", "Login");
         }
 
+        // Obtener la hoja de vida actual antes de los cambios
+        var hojaDeVidaActual = await _apiService.GetHojaDeVidaAsync(candidatoCodigo);
+        if (hojaDeVidaActual == null)
+        {
+            return RedirectToAction("IngresarHojaDeVida");
+        }
+
+        // Generar el resumen de los cambios
+        string cambios = GenerarResumenCambios(hojaDeVidaActual, hojaDeVidaDto);
+
         // Asignar el código del candidato al DTO
         hojaDeVidaDto.CandidatoCodigo = candidatoCodigo;
 
         // Llamar al servicio para actualizar la hoja de vida
-        var success = await _apiService.ActualizarHojaDeVidaAsync(hojaDeVidaDto, "Edición realizada");
+        var success = await _apiService.ActualizarHojaDeVidaAsync(hojaDeVidaDto, cambios);
         if (success)
         {
             return RedirectToAction("MostrarHojaDeVida", new { codigo = candidatoCodigo });
@@ -111,6 +120,34 @@ public class HojaDeVidaController : Controller
         ModelState.AddModelError(string.Empty, "Error al actualizar la hoja de vida.");
         return View(hojaDeVidaDto);
     }
+    private string GenerarResumenCambios(HojaDeVidaDto hojaDeVidaActual, HojaDeVidaDto hojaDeVidaNueva)
+    {
+        var cambios = new List<string>();
+
+        if (hojaDeVidaActual.FormacionAcademica != hojaDeVidaNueva.FormacionAcademica)
+        {
+            cambios.Add($"Formación Académica modificada de '{hojaDeVidaActual.FormacionAcademica}' a '{hojaDeVidaNueva.FormacionAcademica}'");
+        }
+
+        if (hojaDeVidaActual.ExperienciaProfesional != hojaDeVidaNueva.ExperienciaProfesional)
+        {
+            cambios.Add($"Experiencia Profesional modificada de '{hojaDeVidaActual.ExperienciaProfesional}' a '{hojaDeVidaNueva.ExperienciaProfesional}'");
+        }
+
+        if (hojaDeVidaActual.ReferenciasPersonales != hojaDeVidaNueva.ReferenciasPersonales)
+        {
+            cambios.Add($"Referencias Personales modificadas de '{hojaDeVidaActual.ReferenciasPersonales}' a '{hojaDeVidaNueva.ReferenciasPersonales}'");
+        }
+
+        if (hojaDeVidaActual.Idiomas != hojaDeVidaNueva.Idiomas)
+        {
+            cambios.Add($"Idiomas modificados de '{hojaDeVidaActual.Idiomas}' a '{hojaDeVidaNueva.Idiomas}'");
+        }
+
+        return string.Join(", ", cambios);
+    }
+
+
 
 
 }
