@@ -2,11 +2,11 @@
 
 public class LoginDto
 {
-	[Required]
-	[EmailAddress]
-	public string CorreoElectronico { get; set; }
+    [Required]
+    [EmailAddress]
+    public string CorreoElectronico { get; set; }
 
-	[Required]
-	[DataType(DataType.Password)]
-	public string Contrasena { get; set; }
+    [Required]
+    [DataType(DataType.Password)]
+    public string Contrasena { get; set; }
 }

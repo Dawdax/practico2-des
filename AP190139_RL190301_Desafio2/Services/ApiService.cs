@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
+using Newtonsoft.Json;
 
 public class ApiService
 {
@@ -16,11 +17,37 @@ public class ApiService
 		var response = await _httpClient.PostAsJsonAsync("https://localhost:7116/api/Candidato/register", candidatoDto);
 		return response.IsSuccessStatusCode;
 	}
-	public async Task<bool> LoginAsync(LoginDto loginDto)
-	{
-		var response = await _httpClient.PostAsJsonAsync("https://localhost:7116/api/Candidato/login", loginDto);
-		return response.IsSuccessStatusCode;
-	}
+    public async Task<string> LoginAsync(LoginDto loginDto)
+    {
+        var response = await _httpClient.PostAsJsonAsync("https://localhost:7116/api/Candidato/login", loginDto);
+        if (response.IsSuccessStatusCode)
+        {
+            var jsonString = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<LoginResultDto>(jsonString);
+            return result?.Codigo;  // Devolver el código del candidato
+        }
+        return null;
+    }
+
+    public async Task<HojaDeVidaDto> GetHojaDeVidaAsync(string codigoCandidato)
+    {
+        var response = await _httpClient.GetAsync($"https://localhost:7116/api/HojaDeVida/hojadevida/{codigoCandidato}");
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadFromJsonAsync<HojaDeVidaDto>();
+        }
+        return null;
+    }
+
+    public async Task<bool> IngresarHojaDeVidaAsync(HojaDeVidaDto hojaDeVidaDto)
+    {
+        var candidatoCodigo = hojaDeVidaDto.CandidatoCodigo;
+        var response = await _httpClient.PostAsJsonAsync($"https://localhost:7116/api/HojaDeVida/ingresarHojaDeVida?candidatoCodigo={candidatoCodigo}", hojaDeVidaDto);
+        return response.IsSuccessStatusCode;
+    }
+
+
+
 
 
 }

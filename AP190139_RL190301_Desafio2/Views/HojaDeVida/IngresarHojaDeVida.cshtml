@@ -1,0 +1,33 @@
+﻿@model HojaDeVidaDto
+
+<h2>Ingresar Hoja de Vida</h2>
+
+<form asp-action="IngresarHojaDeVida" method="post">
+    <!-- No se necesita un campo oculto para el código porque se asigna en el controlador -->
+
+    <div>
+        <label for="FormacionAcademica">Formación Académica:</label>
+        <textarea asp-for="FormacionAcademica" class="form-control"></textarea>
+        <span asp-validation-for="FormacionAcademica" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label for="ExperienciaProfesional">Experiencia Profesional:</label>
+        <textarea asp-for="ExperienciaProfesional" class="form-control"></textarea>
+        <span asp-validation-for="ExperienciaProfesional" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label for="ReferenciasPersonales">Referencias Personales:</label>
+        <textarea asp-for="ReferenciasPersonales" class="form-control"></textarea>
+        <span asp-validation-for="ReferenciasPersonales" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label for="Idiomas">Idiomas:</label>
+        <textarea asp-for="Idiomas" class="form-control"></textarea>
+        <span asp-validation-for="Idiomas" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar Hoja de Vida</button>
+</form>

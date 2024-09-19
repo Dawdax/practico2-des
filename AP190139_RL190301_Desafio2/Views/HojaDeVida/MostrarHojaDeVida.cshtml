@@ -1,0 +1,25 @@
+﻿@model HojaDeVidaDto
+
+<h2>Hoja de Vida</h2>
+
+<div>
+    <h3>Formación Académica</h3>
+    <p>@Model.FormacionAcademica</p>
+</div>
+
+<div>
+    <h3>Experiencia Profesional</h3>
+    <p>@Model.ExperienciaProfesional</p>
+</div>
+
+<div>
+    <h3>Referencias Personales</h3>
+    <p>@Model.ReferenciasPersonales</p>
+</div>
+
+<div>
+    <h3>Idiomas</h3>
+    <p>@Model.Idiomas</p>
+</div>
+
+<a href="@Url.Action("IngresarHojaDeVida", "HojaDeVida")" class="btn btn-primary">Editar Hoja de Vida</a>

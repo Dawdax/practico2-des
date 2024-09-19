@@ -68,19 +68,20 @@ namespace GOES.API.Controllers
             }
         }
 
-		[HttpPost("login")]
-		public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
-		{
-			using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("GOES_DB")))
-			{
-				var query = "SELECT * FROM Candidato WHERE CorreoElectronico = @CorreoElectronico AND Contrasena = @Contrasena";
-				var candidato = await db.QueryFirstOrDefaultAsync(query, new { loginDto.CorreoElectronico, loginDto.Contrasena });
-				if (candidato != null)
-					return Ok("Login exitoso");
-				else
-					return Unauthorized("Correo o contraseña incorrectos");
-			}
-		}
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("GOES_DB")))
+            {
+                var query = "SELECT Codigo FROM Candidato WHERE CorreoElectronico = @CorreoElectronico AND Contrasena = @Contrasena";
+                var candidatoCodigo = await db.QueryFirstOrDefaultAsync<string>(query, new { loginDto.CorreoElectronico, loginDto.Contrasena });
+                if (candidatoCodigo != null)
+                    return Ok(new { Codigo = candidatoCodigo });  // Devolver el código del candidato
+                else
+                    return Unauthorized("Correo o contraseña incorrectos");
+            }
+        }
 
-	}
+
+    }
 }

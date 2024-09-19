@@ -21,17 +21,16 @@ namespace GOES.API.Controllers
 
         // POST: api/HojaDeVida/ingresarHojaDeVida
         [HttpPost("ingresarHojaDeVida")]
-        public async Task<IActionResult> IngresarHojaDeVida([FromBody] HojaDeVidaDto hojaDto, [FromQuery] string candidatoCodigo)
+        public async Task<IActionResult> IngresarHojaDeVida([FromBody] HojaDeVidaDto hojaDto)
         {
-            // Se asegura que CandidatoCodigo sea obligatorio
-            if (string.IsNullOrEmpty(candidatoCodigo))
+            if (string.IsNullOrEmpty(hojaDto.CandidatoCodigo))
             {
                 return BadRequest("CandidatoCodigo es obligatorio.");
             }
 
             var hojaDeVida = new
             {
-                CandidatoCodigo = candidatoCodigo,  // Usar el CandidatoCodigo que llega en el query
+                CandidatoCodigo = hojaDto.CandidatoCodigo,
                 FormacionAcademica = hojaDto.FormacionAcademica,
                 ExperienciaProfesional = hojaDto.ExperienciaProfesional,
                 ReferenciasPersonales = hojaDto.ReferenciasPersonales,
@@ -41,8 +40,7 @@ namespace GOES.API.Controllers
             using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("GOES_DB")))
             {
                 var query = @"INSERT INTO HojaDeVida (CandidatoCodigo, FormacionAcademica, ExperienciaProfesional, ReferenciasPersonales, Idiomas)
-                              VALUES (@CandidatoCodigo, @FormacionAcademica, @ExperienciaProfesional, @ReferenciasPersonales, @Idiomas)";
-
+                      VALUES (@CandidatoCodigo, @FormacionAcademica, @ExperienciaProfesional, @ReferenciasPersonales, @Idiomas)";
                 var result = await db.ExecuteAsync(query, hojaDeVida);
                 if (result > 0)
                     return Ok("Hoja de vida registrada exitosamente.");
@@ -50,6 +48,7 @@ namespace GOES.API.Controllers
                     return BadRequest("Error al registrar la hoja de vida.");
             }
         }
+
 
         // PUT: api/HojaDeVida/actualizarHojaDeVida
         [HttpPut("actualizarHojaDeVida")]
