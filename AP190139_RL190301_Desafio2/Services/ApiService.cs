@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using System.Net.Http.Json;
 using Newtonsoft.Json;
-
+using AP190139_RL190301_Desafio2.DTOs;
 public class ApiService
 {
 	private readonly HttpClient _httpClient;
@@ -56,6 +56,17 @@ public class ApiService
         var response = await _httpClient.PostAsJsonAsync("https://localhost:7116/api/Bitacora/registrar", bitacoraDto);
         return response.IsSuccessStatusCode;
     }
+    public async Task<IEnumerable<BitacoraDto>> GetBitacorasAsync(string candidatoCodigo)
+    {
+        var response = await _httpClient.GetAsync($"https://localhost:7116/api/HojaDeVida/bitacoras/{candidatoCodigo}");
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadFromJsonAsync<IEnumerable<BitacoraDto>>();
+        }
+
+        return Enumerable.Empty<BitacoraDto>();
+    }
+
 
 
 }

@@ -120,6 +120,22 @@ public class HojaDeVidaController : Controller
         ModelState.AddModelError(string.Empty, "Error al actualizar la hoja de vida.");
         return View(hojaDeVidaDto);
     }
+    [HttpGet]
+    public async Task<IActionResult> VerBitacoras()
+    {
+        var candidatoCodigo = HttpContext.Session.GetString("CodigoCandidato");
+
+        if (string.IsNullOrEmpty(candidatoCodigo))
+        {
+            return RedirectToAction("Index", "Login");
+        }
+
+        // Obtener las bitácoras desde la API
+        var bitacoras = await _apiService.GetBitacorasAsync(candidatoCodigo);
+
+        return View(bitacoras);
+    }
+
     private string GenerarResumenCambios(HojaDeVidaDto hojaDeVidaActual, HojaDeVidaDto hojaDeVidaNueva)
     {
         var cambios = new List<string>();

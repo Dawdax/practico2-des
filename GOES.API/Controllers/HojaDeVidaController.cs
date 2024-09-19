@@ -118,5 +118,21 @@ namespace GOES.API.Controllers
                     return NotFound("Hoja de vida no encontrada.");
             }
         }
+        // GET: api/HojaDeVida/bitacoras/{codigo}
+        [HttpGet("bitacoras/{codigo}")]
+        public async Task<IActionResult> GetBitacoras(string codigo)
+        {
+            using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("GOES_DB")))
+            {
+                var query = "SELECT * FROM Bitacora WHERE CandidatoCodigo = @CandidatoCodigo ORDER BY FechaModificacion DESC";
+                var bitacoras = await db.QueryAsync<BitacoraDto>(query, new { CandidatoCodigo = codigo });
+
+                if (bitacoras != null)
+                    return Ok(bitacoras);
+                else
+                    return NotFound("No se encontraron bitácoras para este candidato.");
+            }
+        }
+
     }
 }
