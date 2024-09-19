@@ -16,4 +16,11 @@ public class ApiService
 		var response = await _httpClient.PostAsJsonAsync("https://localhost:7116/api/Candidato/register", candidatoDto);
 		return response.IsSuccessStatusCode;
 	}
+	public async Task<bool> LoginAsync(LoginDto loginDto)
+	{
+		var response = await _httpClient.PostAsJsonAsync("https://localhost:7116/api/Candidato/login", loginDto);
+		return response.IsSuccessStatusCode;
+	}
+
+
 }

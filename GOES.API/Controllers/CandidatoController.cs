@@ -67,5 +67,20 @@ namespace GOES.API.Controllers
                     return NotFound("Candidato no encontrado");
             }
         }
-    }
+
+		[HttpPost("login")]
+		public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+		{
+			using (IDbConnection db = new SqlConnection(_configuration.GetConnectionString("GOES_DB")))
+			{
+				var query = "SELECT * FROM Candidato WHERE CorreoElectronico = @CorreoElectronico AND Contrasena = @Contrasena";
+				var candidato = await db.QueryFirstOrDefaultAsync(query, new { loginDto.CorreoElectronico, loginDto.Contrasena });
+				if (candidato != null)
+					return Ok("Login exitoso");
+				else
+					return Unauthorized("Correo o contraseña incorrectos");
+			}
+		}
+
+	}
 }
