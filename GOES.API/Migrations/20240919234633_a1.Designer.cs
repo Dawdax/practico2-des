@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GOES.API.Migrations
 {
     [DbContext(typeof(GoesDbContext))]
-    [Migration("20240919051147_ActualizarRelaciones")]
-    partial class ActualizarRelaciones
+    [Migration("20240919234633_a1")]
+    partial class a1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
