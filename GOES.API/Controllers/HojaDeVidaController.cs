@@ -5,11 +5,13 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Threading.Tasks;
 using GOES.API.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GOES.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class HojaDeVidaController : ControllerBase
     {
         private readonly IConfiguration _configuration;

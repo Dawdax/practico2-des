@@ -1,5 +1,6 @@
 using GOES.API.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,10 @@ builder.Services.AddCors(options =>
         });
 });
 
- 
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
+
+builder.Services.AddIdentityCore<Usuario>().AddEntityFrameworkStores<GoesDbContext>().AddApiEndpoints();
 
 
 var connectionString = builder.Configuration.GetConnectionString("GOES_DB");
@@ -41,7 +45,13 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseCors("AllowAllOrigins");
 
+app.UseAuthentication();
+
 app.UseAuthorization();
+
+app.MapControllers();
+
+app.MapIdentityApi<Usuario>();
 
 app.MapControllers();
 
